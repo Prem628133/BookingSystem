@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:16
+    container_name: booking_db
+    restart: always
+    environment:
+      POSTGRES_DB: bookingdb
+      POSTGRES_USER: bookinguser
+      POSTGRES_PASSWORD: bookingpass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  web:
+    build: .
+    container_name: booking_app
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DB_NAME=bookingdb
+      - DB_USER=bookinguser
+      - DB_PASSWORD=bookingpass
+      - DB_HOST=db
+      - DB_PORT=5432
+
+volumes:
+  postgres_data:
+
+
