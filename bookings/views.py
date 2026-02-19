@@ -1,9 +1,27 @@
-from bookings.models import Booking, Offer, Service
+from bookings.models import Booking, Customer, Offer, Service
 from django.utils import timezone
-from bookings.serializers import BookingSerializer, OfferSerializer, ServiceSerializer
+from bookings.serializers import BookingSerializer, OfferSerializer, ServiceSerializer, CustomerSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+
+
+class CreateCustomerAPIView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        customers = Customer.objects.all()
+        serializer = CustomerSerializer(customers, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        request_data = request.data
+        customer, created = Customer.objects.update_or_create(
+            email=request_data.get('email'),
+            phone_number=request_data.get('phone_number'),
+        )
+        serializer = CustomerSerializer(customer)
+        status_code = status.HTTP_201_CREATED if created else status.HTTP_200_OK
+        return Response(serializer.data, status=status_code)
 
 
 class BookingListCreateAPIView(APIView):
@@ -14,11 +32,25 @@ class BookingListCreateAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
-        serializer = BookingSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = request.data
+        service_ids = data.pop("service_ids", [])
+
+        booking, created = Booking.objects.update_or_create(
+            customer_id=data.get("customer"),
+            booking_date=data.get("booking_date"),
+            booking_time=data.get("booking_time"),
+            number_of_guests=data.get("number_of_guests"),
+        )
+
+        # Update ManyToMany services
+        if service_ids:
+            booking.services.set(service_ids)
+
+        serializer = BookingSerializer(booking)
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED if created else status.HTTP_200_OK
+        )
 
 
 class BookingConfirmAPIView(APIView):

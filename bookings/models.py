@@ -3,6 +3,17 @@ from django.utils import timezone
 # Create your models here.
 
 
+class Customer(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=15, unique=True)
+
+    class Meta:
+        unique_together = [
+            ('email', 'phone_number')
+        ]
+
+
 class Booking(models.Model):
 
     STATUS_CHOICES = [
@@ -11,9 +22,9 @@ class Booking(models.Model):
         ('Cancelled', 'Cancelled'),
     ]
 
-    customer_name = models.CharField(max_length=100)
-    email = models.EmailField()
-    phone_number = models.CharField(max_length=15)
+    customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE, related_name="bookings", null=True, blank=True)
+
     booking_date = models.DateField()
     booking_time = models.TimeField()
     number_of_guests = models.PositiveIntegerField()
@@ -25,8 +36,13 @@ class Booking(models.Model):
     cancelled_at = models.DateTimeField(null=True, blank=True)
     services = models.ManyToManyField('Service', blank=True)
 
+    class Meta:
+        unique_together = [
+            ('customer', 'booking_date', 'booking_time')
+        ]
+
     def __str__(self):
-        return f"{self.customer_name} - {self.status}"
+        return f"{self.customer.name} - {self.status}"
 
     def save(self, *args, **kwargs):
         if self.status == 'Confirmed' and not self.confirmed_at:
@@ -43,8 +59,7 @@ class Service(models.Model):
     duration = models.DurationField()
     category = models.CharField(max_length=50)
     is_available = models.BooleanField(default=True)
-    # image = models.ImageField(upload_to='services/', null=True, blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    image_url = models.URLField(blank=True, null=True)
 
 
 class Offer(models.Model):

@@ -1,7 +1,9 @@
 from django.urls import path
-from .views import BookingConfirmAPIView, BookingListCreateAPIView, BookingCancelAPIView, OfferListCreateAPIView, ServiceListCreateAPIView
+from .views import BookingConfirmAPIView, BookingListCreateAPIView, BookingCancelAPIView, OfferListCreateAPIView, ServiceListCreateAPIView, CreateCustomerAPIView
 
 urlpatterns = [
+    path('customers/', CreateCustomerAPIView.as_view(),
+         name='customer-list-create'),
     path('bookings/', BookingListCreateAPIView.as_view(),
          name='booking-list-create'),
     path('bookings/<int:id>/confirm/', BookingConfirmAPIView.as_view(),
