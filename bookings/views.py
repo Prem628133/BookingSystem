@@ -9,18 +9,24 @@ from rest_framework import status
 class CreateCustomerAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
+        search_query = request.query_params.get("search")
+
         customers = Customer.objects.all()
+
+        if search_query:
+            customers = customers.filter(name__icontains=search_query)
+
         serializer = CustomerSerializer(customers, many=True)
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
         request_data = request.data
-        customer, created = Customer.objects.update_or_create(
+        customer = Customer.objects.get_or_create(
             email=request_data.get('email'),
             phone_number=request_data.get('phone_number'),
         )
-        serializer = CustomerSerializer(customer)
-        status_code = status.HTTP_201_CREATED if created else status.HTTP_200_OK
+        serializer = CustomerSerializer(customer[0])
+        status_code = status.HTTP_201_CREATED
         return Response(serializer.data, status=status_code)
 
 
@@ -35,11 +41,13 @@ class BookingListCreateAPIView(APIView):
         data = request.data
         service_ids = data.pop("service_ids", [])
 
-        booking, created = Booking.objects.update_or_create(
+        booking = Booking.objects.get_or_create(
             customer_id=data.get("customer"),
             booking_date=data.get("booking_date"),
             booking_time=data.get("booking_time"),
-            number_of_guests=data.get("number_of_guests"),
+            defaults={
+                "number_of_guests": data.get("number_of_guests"),
+            }
         )
 
         # Update ManyToMany services
@@ -49,7 +57,7 @@ class BookingListCreateAPIView(APIView):
         serializer = BookingSerializer(booking)
         return Response(
             serializer.data,
-            status=status.HTTP_201_CREATED if created else status.HTTP_200_OK
+            status=status.HTTP_201_CREATED
         )
 
 
