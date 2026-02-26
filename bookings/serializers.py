@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from bookings.models import Booking, Customer, Service, Offer
+from bookings.models import Booking, Service, Offer, User
 
 
 class ServiceSerializer(serializers.ModelSerializer):
@@ -22,22 +22,8 @@ class BookingMiniSerializer(serializers.ModelSerializer):
             'services'
         ]
 
-
-class CustomerSerializer(serializers.ModelSerializer):
-    bookings = BookingMiniSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Customer
-        fields = [
-            'id',
-            'name',
-            'email',
-            'phone_number',
-            'bookings'
-        ]
-
-
 # Booking Serializer
+
 
 class BookingSerializer(serializers.ModelSerializer):
 
@@ -90,3 +76,19 @@ class OfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = Offer
         fields = '__all__'
+
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'password', 'role']
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            password=validated_data['password'],
+            role=validated_data['role']
+        )
+        return user

@@ -1,17 +1,24 @@
 from django.db import models
 from django.utils import timezone
 # Create your models here.
+from django.contrib.auth.models import AbstractUser
+
+from booking.booking import settings
 
 
-class Customer(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    phone_number = models.CharField(max_length=15, unique=True)
+class User(AbstractUser):
 
-    class Meta:
-        unique_together = [
-            ('email', 'phone_number')
-        ]
+    ROLE_CHOICES = (
+        ('ADMIN', 'Admin'),
+        ('STAFF', 'Staff'),
+        ('CUSTOMER', 'Customer'),
+    )
+
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.username} - {self.role}"
 
 
 class Booking(models.Model):
@@ -23,7 +30,7 @@ class Booking(models.Model):
     ]
 
     customer = models.ForeignKey(
-        Customer, on_delete=models.CASCADE, related_name="bookings", null=True, blank=True)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,)
 
     booking_date = models.DateField()
     booking_time = models.TimeField()
@@ -42,7 +49,7 @@ class Booking(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.customer.name} - {self.status}"
+        return f"{self.customer.username} - {self.status}"
 
     def save(self, *args, **kwargs):
         if self.status == 'Confirmed' and not self.confirmed_at:
