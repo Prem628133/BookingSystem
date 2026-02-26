@@ -6,58 +6,58 @@ The system supports JWT authentication, prevents duplicate bookings, and automat
 
 🚀 Features
 
-Custom User Model with Roles (ADMIN / STAFF / CUSTOMER)
+1.Custom User Model with Roles (ADMIN / STAFF / CUSTOMER)
 
-JWT Authentication (Access & Refresh Tokens)
+2.JWT Authentication (Access & Refresh Tokens)
 
-Booking creation and management
+3.Booking creation and management
 
-Service management
+4.Service management
 
-Offer management
+5.Offer management
 
-Many-to-many relationship between Bookings and Services
+6.Many-to-many relationship between Bookings and Services
 
-Many-to-many relationship between Services and Offers
+7.Many-to-many relationship between Services and Offers
 
-Automatic confirmation timestamp handling
+8.Automatic confirmation timestamp handling
 
-Duplicate booking prevention
+9.Duplicate booking prevention
 
-PostgreSQL database support
+10.PostgreSQL database support
 
-Dockerized environment
+11.Dockerized environment
 
 🛠️ Tech Stack
 
-Python 3.12
+1.Python 3.12
 
-Django 6+
+2.Django 6+
 
-Django REST Framework
+3.Django REST Framework
 
-Simple JWT
+4.Simple JWT
 
-PostgreSQL
+5.PostgreSQL
 
-Docker & Docker Compose
+6.Docker & Docker Compose
 
 📂 Data Models
 👤 User (Custom User Model)
 
-Extends Django's AbstractUser.
+1.Extends Django's AbstractUser.
 
 Fields:
 
-username (unique)
+1.username (unique)
 
-password
+2.password
 
-role (ADMIN / STAFF / CUSTOMER)
+3.role (ADMIN / STAFF / CUSTOMER)
 
-email
+4.email
 
-phone_number
+5.phone_number
 
 This model replaces the need for a separate Customer model.
 
@@ -65,69 +65,69 @@ This model replaces the need for a separate Customer model.
 
 Fields:
 
-customer (ForeignKey to User)
+1.customer (ForeignKey to User)
 
-booking_date
+2.booking_date
 
-booking_time
+3.booking_time
 
-number_of_guests
+4.number_of_guests
 
-status (Pending / Confirmed / Cancelled)
+5.status (Pending / Confirmed / Cancelled)
 
-is_confirmed
+6.is_confirmed
 
-confirmed_at
+7.confirmed_at
 
-cancelled_at
+8.cancelled_at
 
-services (ManyToMany → Service)
+9.services (ManyToMany → Service)
 
-created_at
+10.created_at
 
 Constraints
 
-Unique booking per customer, date, and time.
+1.Unique booking per customer, date, and time.
 
 Automatic Behavior
 
 When status changes to Confirmed, the system automatically:
 
-Sets confirmed_at
+1.Sets confirmed_at
 
-Sets is_confirmed = True
+2.Sets is_confirmed = True
 
 💼 Service
 
 Fields:
 
-name
+1.name
 
-description
+2.description
 
-price
+3.price
 
-duration
+4.duration
 
-category
+5.category
 
-is_available
+6.is_available
 
-image_url
+7.image_url
 
-offers (ManyToMany → Offer)
+8.offers (ManyToMany → Offer)
 
 🎁 Offer
 
 Fields:
 
-name
+1.name
 
-discount_percentage
+2.discount_percentage
 
-start_date
+3.start_date
 
-end_date
+4.end_date
 
 🔐 Authentication
 
@@ -135,25 +135,25 @@ Authentication is handled using JWT (JSON Web Tokens).
 
 The system provides:
 
-Token obtain endpoint
+1.Token obtain endpoint
 
-Token refresh endpoint
+2.Token refresh endpoint
 
-Protected endpoints require a valid access token in the Authorization header.
+3.Protected endpoints require a valid access token in the Authorization header.
 
 🐳 Docker Setup
 
 The project includes Docker configuration for:
 
-Web application container
+1.Web application container
 
-PostgreSQL database container
+2.PostgreSQL database container
 
-Persistent database volume
+3.Persistent database volume
 
 To start the project:
 
-docker compose up --build
+~docker compose up --build
 
 The application runs on port 8000.
 PostgreSQL runs on port 5433.
@@ -174,15 +174,15 @@ Start development server
 
 🔒 Data Integrity Rules
 
-Unique username enforced
+1.Unique username enforced
 
-Unique booking per customer, date, and time
+2.Unique booking per customer, date, and time
 
-ForeignKey constraints maintained
+3.ForeignKey constraints maintained
 
-Many-to-many relationships handled correctly
+4.Many-to-many relationships handled correctly
 
-JWT authentication required for secured endpoints
+5.JWT authentication required for secured endpoints
 
 📌 Future Improvements
 
@@ -204,10 +204,11 @@ Production deployment configuration
 
 👨‍💻 Author
 
-Prem Kumar
-Django REST Framework Booking System API
+-Prem Kumar
+-Django REST Framework Booking System API
 
 Name
 
-Discount percentage
+1.Discount percentage
+
 
