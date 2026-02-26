@@ -1,9 +1,7 @@
 from django.urls import path
-from .views import BookingConfirmAPIView, BookingListCreateAPIView, BookingCancelAPIView, OfferListCreateAPIView, ServiceListCreateAPIView, CreateCustomerAPIView
+from .views import BookingConfirmAPIView, BookingListCreateAPIView, BookingCancelAPIView, OfferListCreateAPIView, ServiceListCreateAPIView, UserCreateAPIView
 
 urlpatterns = [
-    path('customers/', CreateCustomerAPIView.as_view(),
-         name='customer-list-create'),
     path('bookings/', BookingListCreateAPIView.as_view(),
          name='booking-list-create'),
     path('bookings/<int:id>/confirm/', BookingConfirmAPIView.as_view(),
@@ -14,4 +12,5 @@ urlpatterns = [
     path('offers/', OfferListCreateAPIView.as_view(), name='offer-list-create'),
     path('services/', ServiceListCreateAPIView.as_view(),
          name='service-list-create'),
+    path('users/create/', UserCreateAPIView.as_view(), name='create-user'),
 ]
