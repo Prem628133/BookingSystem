@@ -1,22 +1,32 @@
 📅 Booking System API
 
-This is a Django REST Framework–based Booking System API that allows customers to create bookings, select services, and apply offers. The system manages customers, bookings, services, and promotional offers with proper relational integrity.
+A Django REST Framework–based Booking System API designed to manage users, bookings, services, and promotional offers with proper relational integrity and role-based architecture.
+
+The system supports JWT authentication, prevents duplicate bookings, and automatically manages booking confirmation timestamps.
 
 🚀 Features
 
-Create and manage customers
+Custom User Model with Roles (ADMIN / STAFF / CUSTOMER)
 
-Create bookings with date & time
+JWT Authentication (Access & Refresh Tokens)
 
-Assign multiple services to a booking
+Booking creation and management
 
-Assign multiple offers to services
+Service management
 
-Automatically handle booking confirmation timestamps
+Offer management
 
-Prevent duplicate bookings for same customer, date, and time
+Many-to-many relationship between Bookings and Services
 
-Nested API responses (services inside bookings, bookings inside customers)
+Many-to-many relationship between Services and Offers
+
+Automatic confirmation timestamp handling
+
+Duplicate booking prevention
+
+PostgreSQL database support
+
+Dockerized environment
 
 🛠️ Tech Stack
 
@@ -26,52 +36,178 @@ Django 6+
 
 Django REST Framework
 
-PostgreSQL (recommended)
+Simple JWT
 
-📂 Project Structure
+PostgreSQL
 
-Customer
+Docker & Docker Compose
 
-Name
+📂 Data Models
+👤 User (Custom User Model)
 
-Email (unique)
+Extends Django's AbstractUser.
 
-Phone number (unique)
+Fields:
 
-Booking
+username (unique)
 
-Customer (ForeignKey)
+password
 
-Booking date & time
+role (ADMIN / STAFF / CUSTOMER)
 
-Number of guests
+email
 
-Status (Pending / Confirmed / Cancelled)
+phone_number
 
-Many-to-many relationship with Services
+This model replaces the need for a separate Customer model.
 
-Auto confirmation timestamp when status becomes Confirmed
+📅 Booking
 
-Service
+Fields:
 
-Name
+customer (ForeignKey to User)
 
-Description
+booking_date
 
-Price
+booking_time
 
-Duration
+number_of_guests
 
-Category
+status (Pending / Confirmed / Cancelled)
 
-Availability
+is_confirmed
 
-Image URL
+confirmed_at
 
-Many-to-many relationship with Offers
+cancelled_at
 
-Offer
+services (ManyToMany → Service)
+
+created_at
+
+Constraints
+
+Unique booking per customer, date, and time.
+
+Automatic Behavior
+
+When status changes to Confirmed, the system automatically:
+
+Sets confirmed_at
+
+Sets is_confirmed = True
+
+💼 Service
+
+Fields:
+
+name
+
+description
+
+price
+
+duration
+
+category
+
+is_available
+
+image_url
+
+offers (ManyToMany → Offer)
+
+🎁 Offer
+
+Fields:
+
+name
+
+discount_percentage
+
+start_date
+
+end_date
+
+🔐 Authentication
+
+Authentication is handled using JWT (JSON Web Tokens).
+
+The system provides:
+
+Token obtain endpoint
+
+Token refresh endpoint
+
+Protected endpoints require a valid access token in the Authorization header.
+
+🐳 Docker Setup
+
+The project includes Docker configuration for:
+
+Web application container
+
+PostgreSQL database container
+
+Persistent database volume
+
+To start the project:
+
+docker compose up --build
+
+The application runs on port 8000.
+PostgreSQL runs on port 5433.
+
+⚙️ Local Development Setup
+
+Create and activate virtual environment
+
+Install dependencies
+
+Configure PostgreSQL database
+
+Run migrations
+
+Create superuser
+
+Start development server
+
+🔒 Data Integrity Rules
+
+Unique username enforced
+
+Unique booking per customer, date, and time
+
+ForeignKey constraints maintained
+
+Many-to-many relationships handled correctly
+
+JWT authentication required for secured endpoints
+
+📌 Future Improvements
+
+Role-based permission enforcement (ADMIN / STAFF restrictions)
+
+Booking slot availability validation
+
+Offer auto-application logic
+
+Payment integration
+
+Email/SMS notifications
+
+API documentation (Swagger / Redoc)
+
+CI/CD integration
+
+Production deployment configuration
+
+👨‍💻 Author
+
+Prem Kumar
+Django REST Framework Booking System API
 
 Name
 
 Discount percentage
+
