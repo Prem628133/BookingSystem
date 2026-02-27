@@ -119,6 +119,11 @@ User = get_user_model()
 class UserCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserCreateSerializer(users, many=True)
+        return Response(serializer.data)
+
     def post(self, request):
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():

@@ -1,77 +1,63 @@
-📅 Booking System API
+## Tech Stack
 
-This is a Django REST Framework–based Booking System API that allows customers to create bookings, select services, and apply offers. The system manages customers, bookings, services, and promotional offers with proper relational integrity.
+- Python 3.12+
+- Django 6+
+- Django REST Framework
+- PostgreSQL
+- Docker & Docker Compose
+- JWT Authentication (SimpleJWT)
 
-🚀 Features
+---
+### Languages
 
-Create and manage customers
+- [ ] Python
+- [ ] SQL
 
-Create bookings with date & time
+### Frameworks
 
-Assign multiple services to a booking
+- [ ] Django
+- [ ] Django Rest Framework
 
-Assign multiple offers to services
+### Database
 
-Automatically handle booking confirmation timestamps
+- [ ] PostgreSQL
 
-Prevent duplicate bookings for same customer, date, and time
+### Tools
 
-Nested API responses (services inside bookings, bookings inside customers)
+- [ ] Linux OS
+- [ ] MakeFiles
+- [ ] Docker and Docker Compose
+- [ ] git
+- [ ] bash shell or equivalent
 
-🛠️ Tech Stack
+## Prerequisites
 
-Python 3.12
+Before running the project, ensure you have:
 
-Django 6+
+- Python 3.12+
+- PostgreSQL 16+
+- Docker & Docker Compose (recommended)
+- Git
+- Basic knowledge of Django and REST APIs
 
-Django REST Framework
+---
 
-PostgreSQL (recommended)
+### Getting Started
 
-📂 Project Structure
+This section contains the instructions to start the project.
 
-Customer
+### 1. Clone the Repository
 
-Name
+```bash
+git clone <your-repository-url>
+cd BookingSystem
 
-Email (unique)
+#### Running the Project
 
-Phone number (unique)
+```bash
+# Refer the Makefile for common commands
+cat Makefile
 
-Booking
-
-Customer (ForeignKey)
-
-Booking date & time
-
-Number of guests
-
-Status (Pending / Confirmed / Cancelled)
-
-Many-to-many relationship with Services
-
-Auto confirmation timestamp when status becomes Confirmed
-
-Service
-
-Name
-
-Description
-
-Price
-
-Duration
-
-Category
-
-Availability
-
-Image URL
-
-Many-to-many relationship with Offers
-
-Offer
-
-Name
-
-Discount percentage
+# start the development project with docker compose up. We will use the handy command
+make up
+```
