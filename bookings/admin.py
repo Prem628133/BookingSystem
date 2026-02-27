@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Booking, Service, Offer
+from bookings.models import User, Booking, Service, Offer
 
 
 @admin.register(User)

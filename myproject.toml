@@ -1,0 +1,18 @@
+[project]
+authors = [{ name = "Prem Kumar" }]
+name = "booking-system"
+version = "1.0.0"
+description = "Django REST Booking System API"
+requires-python = ">=3.12"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.isort]
+profile = "black"
+
+[tool.ruff]
+line-length = 88
+
+[project.urls]
+Repository = https://github.com/kolliprem/BookingSystem.git
